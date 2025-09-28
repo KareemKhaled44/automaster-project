@@ -1,0 +1,8 @@
+/* App.css */
+* {  
+      scroll-behavior: smooth;
+}
+
+button{
+      cursor: pointer;
+}
