@@ -32,7 +32,7 @@ const FAQs = () => {
   }
 
   return (
-    <div className='w-full py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#0f172a] to-[#1e293b]'>
+    <div className='w-full py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10 '>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20">

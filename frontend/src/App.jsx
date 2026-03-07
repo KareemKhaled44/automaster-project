@@ -6,10 +6,13 @@ import './App.css'
 import Home from './pages/home'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
+import AllAcademies from './pages/AllAcademies'
 import AllCourses from './pages/AllCourses'
 import AllTrainers from './pages/AllTrainers'
 import ContactUs from './pages/ContactUs'
 import TrainerProfile from './pages/TrainerPofile'
+import AcademyDetails from './pages/AcademyDetails';
+import ForgotPassword from './pages/ForgotPassword';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -36,12 +39,13 @@ function App() {
         {/* Public */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/all-academies" element={<AllAcademies />} />
         <Route path="/all-courses" element={<AllCourses />} />
         <Route path="/all-trainers" element={<AllTrainers />} />
         <Route path="/trainer-profile/:id" element={<TrainerProfile />} />
         <Route path="/contact-us" element={<ContactUs />} />
-
-        {/* Add more routes as needed */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/academy-details/:id" element={<AcademyDetails />} />
 
       </Routes>
 

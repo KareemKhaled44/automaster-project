@@ -17,7 +17,9 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log("Sending:", username, password);
             const res = await api.post("/auth/login/", { username, password });
+            console.log("Response:", res.data);
             localStorage.setItem("access", res.data.access);
             localStorage.setItem("refresh", res.data.refresh);
             // Redirect or perform any other actions after successful login
@@ -90,7 +92,7 @@ const SignIn = () => {
                 />
               </div>
               <div className="flex justify-end">
-                <a href="#" className="text-sm text-[#22d3ee] hover:underline">
+                <a href="/forgot-password" className="text-sm text-[#22d3ee] hover:underline">
                   Forgot password?
                 </a>
               </div>

@@ -1,4 +1,4 @@
-import { Header, Hero, PopularAcademies, Courses, Locations, Trainers, FAQs, Footer } from '../exports/index.js';
+import { Header, Hero, PopularAcademies, Courses, Trainers, FAQs, Footer } from '../exports/index.js';
 
 export default function Home() {
   return (
@@ -10,9 +10,8 @@ export default function Home() {
           <Header />
           <Hero />
           <PopularAcademies />
-          <Trainers />
           <Courses />
-          <Locations />
+          <Trainers />
           <FAQs />
           <Footer />
         </div>

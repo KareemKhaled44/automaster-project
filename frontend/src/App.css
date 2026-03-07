@@ -6,3 +6,166 @@
 button{
       cursor: pointer;
 }
+
+/* ===== Range Slider Styling ===== */
+/* Works for Chrome, Safari, Edge, Opera, and Firefox */
+
+/* Custom properties for easy theme management */
+:root {
+  --slider-track-height: 6px;
+  --slider-thumb-size: 18px;
+  --slider-track-color: #1e293b;
+  --slider-track-fill: #22d3ee;
+  --slider-thumb-color: #22d3ee;
+  --slider-thumb-hover: #1e40af;
+  --slider-border-color: #334155;
+}
+
+/* ===== Base slider styles ===== */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: var(--slider-track-height);
+  background: transparent;
+  outline: none;
+  margin: 15px 0;
+}
+
+/* ===== Track Styles ===== */
+/* Chrome, Safari, Edge, Opera */
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: var(--slider-track-height);
+  background: linear-gradient(90deg, 
+    var(--slider-track-fill) 0%, 
+    var(--slider-track-fill) var(--progress, 50%), 
+    var(--slider-track-color) var(--progress, 50%)
+  );
+  border-radius: 9999px;
+  border: 1px solid var(--slider-border-color);
+}
+
+/* Firefox */
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: var(--slider-track-height);
+  background: var(--slider-track-color);
+  border-radius: 9999px;
+  border: 1px solid var(--slider-border-color);
+}
+
+/* Firefox progress fill */
+input[type=range]::-moz-range-progress {
+  height: var(--slider-track-height);
+  background: var(--slider-track-fill);
+  border-radius: 9999px;
+}
+
+/* ===== Thumb Styles ===== */
+/* Chrome, Safari, Edge, Opera */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--slider-thumb-size);
+  height: var(--slider-thumb-size);
+  background: var(--slider-thumb-color);
+  border-radius: 50%;
+  margin-top: calc((var(--slider-thumb-size) - var(--slider-track-height)) / -2);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+/* Firefox */
+input[type=range]::-moz-range-thumb {
+  width: var(--slider-thumb-size);
+  height: var(--slider-thumb-size);
+  background: var(--slider-thumb-color);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+/* Hover effects */
+input[type=range]::-webkit-slider-thumb:hover {
+  background: var(--slider-thumb-hover);
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4);
+}
+
+input[type=range]::-moz-range-thumb:hover {
+  background: var(--slider-thumb-hover);
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4);
+}
+
+/* Active state */
+input[type=range]::-webkit-slider-thumb:active {
+  transform: scale(1.25);
+  background: var(--slider-thumb-hover);
+}
+
+input[type=range]::-moz-range-thumb:active {
+  transform: scale(1.25);
+  background: var(--slider-thumb-hover);
+}
+
+/* Focus state */
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+input[type=range]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Disabled state ===== */
+input[type=range]:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ===== Vertical slider ===== */
+input[type=range].vertical {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: var(--slider-track-height);
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+/* ===== Custom Scrollbar ===== */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #22d3ee, #1e40af);
+  border-radius: 999px;
+  border: 2px solid #0f172a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1e40af, #22d3ee);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #22d3ee #0f172a;
+}

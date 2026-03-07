@@ -11,7 +11,7 @@ const Trainers = () => {
   const getTrainers = () => {
     api.get('api/home-trainers/')
     .then(response => {
-      setTrainers(response.data)
+      setTrainers(response.data.results)
     .catch(error =>{
       console.error("Error fetching trainers:", error)
     })
@@ -23,7 +23,7 @@ const Trainers = () => {
   }, [])
 
   return (
-    <div className="w-full py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-br from-[#1e3a8a]/80 to-[#0f172a]/90">
+    <div className="w-full py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10">
       {/* Section Title */}
       <h2 className="flex justify-center w-full text-white font-bold text-3xl lg:text-4xl 2xl:text-5xl uppercase tracking-tight mb-8 md:mb-12">
         Our<span className="text-[#22d3ee] ml-2">Trainers</span>

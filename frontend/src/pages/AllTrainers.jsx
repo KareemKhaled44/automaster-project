@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Car, MapPin, Search, ChevronDown, Star } from 'lucide-react'
+import { Car, MapPin, Search, Venus , Mars  } from 'lucide-react'
 import api from '@/exports/Axios.jsx';
-import { Trainer1, Trainer2, Trainer3, Trainer4} from '../exports/index.js'
 import {Header} from '../exports/index.js';
 
 const AllTrainers = () => {
@@ -10,7 +9,7 @@ const AllTrainers = () => {
     const getTrainers = () => {
       api.get('api/trainers/')
         .then(response => {
-          setTrainers(response.data)
+          setTrainers(response.data.results)
         })
         .catch(error => {
           console.error("Error fetching trainers:", error)
@@ -53,42 +52,58 @@ const AllTrainers = () => {
         </div>
 
         {/* Trainers Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10">
-            {trainers.map((trainer) => (
-              <div 
-                key={trainer.id}
-                className="bg-[#1e293b] border border-gray-700 rounded-xl p-6 text-center cursor-pointer 
-                  transition-all duration-300 hover:border-[#22d3ee] hover:shadow-lg hover:shadow-[#22d3ee]/20 
-                  hover:scale-[1.02] active:scale-95 flex flex-col items-center"
-              >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10">
+          {trainers.map((trainer) => (
+            <div 
+              key={trainer.id}
+              className="bg-[#1e293b] border border-gray-700 rounded-xl p-6 text-center cursor-pointer 
+                transition-all duration-300 hover:border-[#22d3ee] hover:shadow-lg hover:shadow-[#22d3ee]/20 
+                hover:scale-[1.02] active:scale-95 flex flex-col items-center relative"
+            >
+              <div className="relative">
                 <img 
                   src={trainer.image} 
                   alt={trainer.name} 
                   className="w-24 h-24 rounded-full mb-4 object-cover border-2 border-[#22d3ee]"
                 />
-                <h3 className="text-white text-xl font-semibold mb-1">{trainer.name}</h3>
                 
-                <div className="flex items-center justify-center text-gray-300 text-base mb-1">
-                  <Car className="mr-2 h-4 w-4 text-[#22d3ee]" />
-                  <span>{trainer.car_model}</span>
-                </div>
-                
-                <div className="flex items-center justify-center text-gray-400 text-sm mb-2">
-                  <MapPin className="mr-2 h-4 w-4 text-[#22d3ee]" />
-                  <span>{trainer.location}, Egypt</span>
-                </div>
-                
-                <div className="flex items-center justify-center text-yellow-400 text-sm mb-3">
-                  <span className="text-gray-400 ml-1">({trainer.experience_years} years of experience)</span>
-                </div>
-                
-                <button className="mt-2 px-5 py-2 bg-[#22d3ee] text-white text-sm rounded-full 
-                  hover:bg-[#1e40af] transition duration-200 w-full">
-                  View Profile
-                </button>
+                {/* Gender Badge on Image */}
+                {trainer.gender && (
+                  <div className={`absolute bottom-0 right-0 p-1.5 rounded-full ${
+                    trainer.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
+                  } shadow-lg transform translate-x-1 translate-y-1`}>
+                    {trainer.gender === 'female' ? (
+                      <Venus className="h-3.5 w-3.5 text-white" />
+                    ) : (
+                      <Mars className="h-3.5 w-3.5 text-white" />
+                    )}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+              
+              <h3 className="text-white text-xl font-semibold mb-1">{trainer.name}</h3>
+              
+              <div className="flex items-center justify-center text-gray-300 text-base mb-1">
+                <Car className="mr-2 h-4 w-4 text-[#22d3ee]" />
+                <span>{trainer.car_model}</span>
+              </div>
+              
+              <div className="flex items-center justify-center text-gray-400 text-sm mb-2">
+                <MapPin className="mr-2 h-4 w-4 text-[#22d3ee]" />
+                <span>{trainer.location}</span>
+              </div>
+              
+              <div className="flex items-center justify-center text-sm mb-3">
+                <span className="text-gray-400">{trainer.experience_years} years experience</span>
+              </div>
+              
+              <button className="mt-2 px-5 py-2 bg-[#22d3ee] text-white text-sm rounded-full 
+                hover:bg-[#1e40af] transition duration-200 w-full">
+                View Profile
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
