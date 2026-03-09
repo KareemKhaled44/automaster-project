@@ -49,6 +49,18 @@ class AcademyListCreateView(generics.ListCreateAPIView):
 
         return qs
 
+class AcademyDetailView(generics.RetrieveAPIView):
+    queryset = (
+        Academy.objects
+        .prefetch_related('courses', 'trainers', 'contacts')
+        .annotate(
+            avg_rating=Avg('ratings__rating'),
+            reviews_count=Count('ratings'),
+            courses_count=Count('courses')
+        )
+    )
+    serializer_class = AcademyDetailSerializer 
+
 class HomeCourseListView(generics.ListAPIView):
     serializer_class = CourseSerializer
 

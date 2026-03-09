@@ -28,7 +28,7 @@ const Courses = () => {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20">
           <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white uppercase tracking-tight'>
-            Pick up your suitable <span className='text-[#22d3ee]'>course</span>
+            Pick up your  <span className='text-[#22d3ee]'> Featured Courses</span>
           </h2>
           <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
             Master the road with our expert-led courses designed for all skill levels

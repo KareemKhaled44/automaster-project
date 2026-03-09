@@ -8,14 +8,14 @@ class AcademySerializer(serializers.ModelSerializer):
     courses_count = serializers.IntegerField(source='courses.count', read_only=True)
     trainers_count = serializers.IntegerField(source='trainers.count', read_only=True)
     avg_rating = serializers.FloatField(read_only=True)
-    reviews_count = reviews_count = serializers.IntegerField(read_only=True)
+    reviews_count = serializers.IntegerField(read_only=True)
     contactInfo = serializers.SerializerMethodField()
     has_female_trainer = serializers.SerializerMethodField()
     minimum_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Academy
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'logo', 'location', 'courses_count', 'trainers_count', 'avg_rating', 'reviews_count', 'contactInfo', 'has_female_trainer', 'minimum_price']
 
     def get_logo(self, obj):
         request = self.context.get('request')
@@ -39,6 +39,7 @@ class AcademySerializer(serializers.ModelSerializer):
     def get_minimum_price(self, obj):
         min_price = obj.courses.aggregate(Min('price'))['price__min']
         return min_price if min_price is not None else 0
+
     
 class TrainerSerializer(serializers.ModelSerializer):
     location = serializers.StringRelatedField() # get only the location name
@@ -82,7 +83,10 @@ class TrainerProfileSerializer(serializers.ModelSerializer):
         model = Trainer
         fields = '__all__'
 
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = '__all__'
+class AcademyDetailSerializer(AcademySerializer):
+
+    courses = CourseSerializer(many=True, read_only=True)
+    trainers = TrainerSerializer(many=True, read_only=True)
+
+    class Meta(AcademySerializer.Meta):
+        fields = AcademySerializer.Meta.fields + ['courses', 'trainers']
