@@ -12,16 +12,9 @@ from django.dispatch import receiver
 
 class Rating(models.Model):
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="ratings"
-    )
+    user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ratings")
 
-    rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)],
-        db_index=True
-    )
+    rating = models.PositiveSmallIntegerField( validators=[MinValueValidator(1), MaxValueValidator(5)], db_index=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -53,6 +46,41 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.user} rated {self.rating}"
+
+class Review(models.Model):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
+
+    text = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # Generic relation
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE
+    )
+
+    object_id = models.PositiveIntegerField()
+
+    content_object = GenericForeignKey(
+        'content_type',
+        'object_id'
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+        unique_together = [
+            "user",
+            "content_type",
+            "object_id"
+        ]
+
+    def __str__(self):
+        return f"{self.user} review"
     
 class Academy(models.Model):
     name = models.CharField(max_length=255)

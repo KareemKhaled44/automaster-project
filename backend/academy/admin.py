@@ -7,8 +7,16 @@ class RatingInline(GenericTabularInline):
     model = Rating
     extra = 1
 
+class ContactInfoInline(admin.StackedInline):
+    model = ContactInfo
+    extra = 1
+
+class ReviewInline(GenericTabularInline):
+    model = Review
+    extra = 1
+
 class AcademyAdmin(admin.ModelAdmin):
-    inlines = [RatingInline]
+    inlines = [RatingInline, ContactInfoInline, ReviewInline]
     search_fields = ['name', 'location__city', 'location__area']
 
 class CourseAdmin(admin.ModelAdmin):
@@ -40,3 +48,4 @@ admin.site.register(ContactInfo)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Location)
 admin.site.register(Trainer)
+admin.site.register(Review)

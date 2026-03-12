@@ -87,6 +87,82 @@ class AcademyDetailSerializer(AcademySerializer):
 
     courses = CourseSerializer(many=True, read_only=True)
     trainers = TrainerSerializer(many=True, read_only=True)
+    reviews = serializers.SerializerMethodField()
 
     class Meta(AcademySerializer.Meta):
-        fields = AcademySerializer.Meta.fields + ['courses', 'trainers']
+        fields = AcademySerializer.Meta.fields + ['courses', 'trainers', 'reviews']
+    
+    def get_reviews(self, obj):
+
+        content_type = ContentType.objects.get_for_model(Academy)
+
+        reviews = Review.objects.filter(
+            content_type=content_type,
+            object_id=obj.id
+        ).select_related("user").order_by("-created_at")[:5]
+
+        return ReviewSerializer(reviews, many=True).data
+
+class ReviewSerializer(serializers.ModelSerializer):
+
+    user_name = serializers.CharField(source="user.username", read_only=True)
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = [
+            "id",
+            "user_name",
+            "text",
+            "created_at",
+            "rating",
+        ]
+        
+    def get_rating(self, obj):
+
+        rating = Rating.objects.filter(
+            user=obj.user,
+            content_type=obj.content_type,
+            object_id=obj.object_id
+        ).first()
+
+        return rating.rating if rating else 0
+
+class ReviewCreateSerializer(serializers.Serializer):
+
+    content_type = serializers.CharField()
+    object_id = serializers.IntegerField()
+    rating = serializers.IntegerField(min_value=1, max_value=5)
+    text = serializers.CharField()
+
+    def create(self, validated_data):
+
+        user = self.context["request"].user
+
+        model_map = {
+            "academy": Academy,
+            "course": Course,
+            "trainer": Trainer
+        }
+
+        model = model_map.get(validated_data["content_type"])
+
+        obj = model.objects.get(id=validated_data["object_id"])
+
+        content_type = ContentType.objects.get_for_model(model)
+
+        review, created = Review.objects.update_or_create(
+            user=user,
+            content_type=content_type,
+            object_id=obj.id,
+            defaults={"text": validated_data["text"]}
+        )
+
+        Rating.objects.update_or_create(
+            user=user,
+            content_type=content_type,
+            object_id=obj.id,
+            defaults={"rating": validated_data["rating"]}
+        )
+
+        return review
