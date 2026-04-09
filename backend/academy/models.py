@@ -7,9 +7,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-
 # Create your models here.
-
+    
 class Rating(models.Model):
 
     user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ratings")
@@ -84,6 +83,13 @@ class Review(models.Model):
     
 class Academy(models.Model):
     name = models.CharField(max_length=255)
+    user = models.OneToOneField(
+        'authentication.User',   
+        on_delete=models.CASCADE,
+        related_name='academy_profile',
+        null=True,
+        blank=True
+    )
     description = models.TextField(blank=True)
     logo = models.ImageField(upload_to='academies/', blank=True, null=True)
     location = models.ManyToManyField('Location', blank=True)
@@ -94,6 +100,7 @@ class Academy(models.Model):
 
     def __str__(self):
         return self.name
+    
     
 class Location(models.Model):
     city = models.CharField(max_length=100)

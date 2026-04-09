@@ -16,3 +16,97 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
   "rating": 5,
   "text": "Great academy!"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 1 - Register as a regular user
+POST http://localhost:8000/auth/register/
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "testuser@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "testpass123",
+    "role": "user"
+}
+
+### 2 - Register as an academy
+POST http://localhost:8000/auth/register/
+Content-Type: application/json
+
+{
+    "username": "ahmedacademy",
+    "email": "testacademy@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "testpass123",
+    "role": "academy"
+}
+
+### 3 - Register with wrong confirm password (should fail)
+POST http://localhost:8000/auth/register/
+Content-Type: application/json
+
+{
+    "username": "testuser2",
+    "email": "testuser2@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "wrongpassword",
+    "role": "user"
+}
+
+### 4 - Register with duplicate username (should fail)
+POST http://localhost:8000/auth/register/
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "different@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "testpass123",
+    "role": "user"
+}
+
+### 5 - Login as user
+POST http://localhost:8000/auth/login/
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "testpass123"
+}
+
+### 6 - Login as academy
+POST http://localhost:8000/auth/login/
+Content-Type: application/json
+
+{
+    "username": "ahmedacademy",
+    "password": "testpass123"
+}
+
+### 7 - Refresh token (paste refresh token from login response)
+POST http://localhost:8000/auth/refresh/
+Content-Type: application/json
+
+{
+    "refresh": "your_refresh_token_here"
+}
+
+### 8 - Logout (paste refresh token from login response)
+POST http://localhost:8000/auth/logout/
+Content-Type: application/json
+
+{
+    "refresh": "your_refresh_token_here"
+}

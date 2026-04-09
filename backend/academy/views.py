@@ -128,6 +128,19 @@ class CourseListCreateView(generics.ListCreateAPIView):
         )
         return qs
 
+class CourseDetailView(generics.RetrieveAPIView):
+    serializer_class = CourseDetailSerializer
+
+    def get_queryset(self):
+        return (
+            Course.objects
+            .prefetch_related('trainers', 'academy')
+            .annotate(
+                avg_rating=Avg('ratings__rating'),
+                reviews_count=Count('ratings'),
+            )
+        )
+
 class HomeTrainerListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Trainer.objects.prefetch_related("courses")[:4]

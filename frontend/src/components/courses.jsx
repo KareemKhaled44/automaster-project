@@ -1,5 +1,5 @@
 import {React, useState, useEffect} from 'react'
-import { Clock, Users, Star, Settings, Zap } from 'lucide-react' // Using Lucide icons instead
+import { Clock, Users, Star, Settings, Zap, Venus  } from 'lucide-react' // Using Lucide icons instead
 import api from '../exports/Axios.jsx'
 
 const Courses = () => {
@@ -124,36 +124,48 @@ const Courses = () => {
                 </div>
 
                 {/* Trainers */}
-              {course.trainers?.length > 0 && (
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="flex">
-                    {course.trainers.slice(0, 3).map((trainer, i) => (
-                      <div
-                        key={trainer.id}
-                        className="w-6 h-6 rounded-full border-2 border-[#1e293b] bg-[#334155]
-                          flex items-center justify-center text-[9px] font-bold text-gray-300
-                          overflow-hidden flex-shrink-0"
-                        style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
-                      >
-                        {trainer.image
-                          ? <img src={trainer.image} alt={trainer.name} className="w-full h-full object-cover" />
-                          : trainer.name.slice(0, 2).toUpperCase()
-                        }
+                  {Array.isArray(course.trainers) && course.trainers.length > 0 && (
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {course.trainers.slice(0, 3).map((trainer, i) => (
+                            <div
+                              key={trainer.id}
+                              className="w-6 h-6 rounded-full border-2 border-[#1e293b] bg-[#334155]
+                                flex items-center justify-center text-[9px] font-bold text-gray-300
+                                overflow-hidden flex-shrink-0"
+                              style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
+                            >
+                              {trainer.image
+                                ? <img src={trainer.image} alt={trainer.name} className="w-full h-full object-cover" />
+                                : trainer.name.slice(0, 2).toUpperCase()
+                              }
+                            </div>
+                          ))}
+                          {course.trainers.length > 3 && (
+                            <div className="w-6 h-6 rounded-full border-2 border-[#1e293b] bg-[#334155]
+                              flex items-center justify-center text-[9px] font-bold text-gray-400"
+                              style={{ marginLeft: -6 }}>
+                              +{course.trainers.length - 3}
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {course.trainers.length} trainer{course.trainers.length !== 1 ? 's' : ''} available
+                        </span>
                       </div>
-                    ))}
-                    {course.trainers.length > 3 && (
-                      <div className="w-6 h-6 rounded-full border-2 border-[#1e293b] bg-[#334155]
-                        flex items-center justify-center text-[9px] font-bold text-gray-400"
-                        style={{ marginLeft: -6 }}>
-                        +{course.trainers.length - 3}
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-xs text-gray-500">
-                    {course.trainers.length} trainer{course.trainers.length !== 1 ? 's' : ''} available
-                  </span>
-                </div>
-              )}
+
+                      {/* Female trainer pill — sits at the end of the trainers row */}
+                      {course.has_female_trainer && (
+                        <div className="flex items-center gap-1 bg-pink-400/10 border border-pink-400/25 
+                          text-pink-400 px-2 py-0.5 rounded-full flex-shrink-0">
+                          <Venus className="h-3 w-3" />
+                          <span className="text-[10px] font-medium">Female Available</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+              
 
                 {/* Price & Button */}
                 <div className="flex items-center justify-between border-t border-gray-700 pt-4">

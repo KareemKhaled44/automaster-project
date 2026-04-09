@@ -17,26 +17,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
 
-  // Private route component
-  const PrivateRoute = ({ children }) => {
-    const access = localStorage.getItem("access");
-    return access ? children : <Navigate to="/signin" />;
-  };
 
   return (
     <Router>
       <Routes>
-        {/* Protected */}
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
 
         {/* Public */}
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/all-academies" element={<AllAcademies />} />
