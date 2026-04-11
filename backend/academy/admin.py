@@ -7,11 +7,20 @@ class RatingInline(GenericTabularInline):
     model = Rating
     extra = 1
 
+class ContactInfoInline(admin.StackedInline):
+    model = ContactInfo
+    extra = 1
+
+class ReviewInline(GenericTabularInline):
+    model = Review
+    extra = 1
+
 class AcademyAdmin(admin.ModelAdmin):
-    inlines = [RatingInline]
+    inlines = [RatingInline, ContactInfoInline, ReviewInline]
     search_fields = ['name', 'location__city', 'location__area']
 
 class CourseAdmin(admin.ModelAdmin):
+    inlines = [RatingInline, ReviewInline]
     class CourseAdminForm(forms.ModelForm):
         class Meta:
             model = Course
@@ -33,10 +42,14 @@ class CourseAdmin(admin.ModelAdmin):
             return cleaned_data
 
     form = CourseAdminForm
+
+class TrainerAdmin(admin.ModelAdmin):
+    inlines = [RatingInline, ReviewInline]
     
 admin.site.register(Rating)
 admin.site.register(Academy, AcademyAdmin)
 admin.site.register(ContactInfo)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Location)
-admin.site.register(Trainer)
+admin.site.register(Trainer, TrainerAdmin)
+admin.site.register(Review)
