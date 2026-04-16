@@ -1,6 +1,9 @@
 import React from 'react'
 import { HeroImage } from '../exports/index.js'
+import { useNavigate } from "react-router-dom";
+
 const Hero = () => {
+  const navigate = useNavigate()
   return (
     <section className="container mx-auto px-4 md:px-8 lg:px-16 py-12 md:py-24">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
@@ -26,7 +29,10 @@ const Hero = () => {
             <a href='#courses' className="px-8 py-3 bg-[#22d3ee] text-white font-semibold rounded-full hover:bg-[#1e40af] transition duration-300 shadow-lg">
               Explore Courses
             </a>
-            <button className="px-8 py-3 bg-transparent text-white font-semibold border-2 border-white rounded-full hover:bg-white hover:text-[#1e40af] transition duration-300">
+            <button 
+              onClick={() => navigate('/register/academy')}
+              className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-[#0f172a] transition duration-300"
+            >
               Join as an Academy
             </button>
           </div>

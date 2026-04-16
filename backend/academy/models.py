@@ -82,9 +82,16 @@ class Review(models.Model):
         return f"{self.user} review"
     
 class Academy(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('suspended', 'Suspended'),
+    ]
+
     name = models.CharField(max_length=255)
     user = models.OneToOneField(
-        'authentication.User',   
+        'authentication.User',
         on_delete=models.CASCADE,
         related_name='academy_profile',
         null=True,
@@ -97,6 +104,18 @@ class Academy(models.Model):
     google_maps_url = models.URLField(blank=True, null=True)
     ratings = GenericRelation(Rating)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True)
+
+    # Approval
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    rejected_reason = models.TextField(blank=True, null=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_by = models.ForeignKey(
+        'authentication.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='approved_academies'
+    )
 
     def __str__(self):
         return self.name

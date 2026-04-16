@@ -110,3 +110,77 @@ Content-Type: application/json
 {
     "refresh": "your_refresh_token_here"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+#########################################
+### 1 - Register as a regular user
+POST http://localhost:8000/auth/register/
+Content-Type: application/json
+
+{
+    "username": "ahmed",
+    "email": "ahmed@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "testpass123"
+}
+
+###
+
+### 2 - Register as an academy
+POST http://localhost:8000/auth/register/academy/
+Content-Type: application/json
+
+{
+    "username": "Email Test",
+    "email": "kemokingo44@gmail.com",
+    "password": "testpass123",
+    "confirm_password": "testpass123",
+    "academy_name": "Email Test Academy",
+    "phone": "01012345678",
+    "description": "Testing email system"
+}
+
+###
+
+### 3 - Try to login as pending academy (should fail)
+POST http://localhost:8000/auth/login/
+Content-Type: application/json
+
+{
+    "username": "oracademy",
+    "password": "testpass123"
+}
+
+###
+
+### 4 - Login as regular user (should succeed)
+POST http://localhost:8000/auth/login/
+Content-Type: application/json
+
+{
+    "username": "ahmed",
+    "password": "testpass123"
+}
+
+###
+
+### 5 - Login as approved academy (should succeed)
+### first go to django admin and set the academy status to approved
+### then try to login
+POST http://localhost:8000/auth/login/
+Content-Type: application/json
+
+{
+    "username": "oracademy",
+    "password": "testpass123"
+}

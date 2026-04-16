@@ -15,7 +15,7 @@ class AcademySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Academy
-        fields = ['id', 'name', 'description', 'logo', 'location', 'courses_count', 'trainers_count', 'avg_rating', 'reviews_count', 'contactInfo', 'has_female_trainer', 'minimum_price']
+        fields = ['id', 'name', 'description', 'logo', 'location', 'courses_count', 'trainers_count', 'avg_rating', 'reviews_count', 'contactInfo', 'has_female_trainer', 'minimum_price', 'address_text', 'google_maps_url']
 
     def get_logo(self, obj):
         request = self.context.get('request')

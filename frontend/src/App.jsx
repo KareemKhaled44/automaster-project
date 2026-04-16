@@ -13,6 +13,8 @@ import ContactUs from './pages/ContactUs'
 import TrainerProfile from './pages/TrainerPofile'
 import AcademyDetails from './pages/AcademyDetails';
 import ForgotPassword from './pages/ForgotPassword';
+import PendingApproval from './pages/PendingApproval';
+import AcademyRegister from './pages/AcademyRegister';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -26,6 +28,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/register/academy" element={<AcademyRegister />} />
+        <Route path="/pending-approval" element={<PendingApproval />} />
+
+        {/* Additional public routes */}
         <Route path="/all-academies" element={<AllAcademies />} />
         <Route path="/all-courses" element={<AllCourses />} />
         <Route path="/all-trainers" element={<AllTrainers />} />

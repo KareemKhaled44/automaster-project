@@ -1,40 +1,72 @@
 import {React, useState} from 'react'
-import { Lock, User, Mail, Phone, Car } from 'lucide-react'
+import { Lock, User, Mail, Building , Car } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {Header} from '../exports/index.js';
 import api from "../exports/Axios.jsx";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const SignUp = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+import { useLocation } from "react-router-dom";
 
-  const navigate = useNavigate();
+const SignUp = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const defaultRole = searchParams.get('role') || 'user'
+  
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirm_password: '',
+    role: defaultRole
+  })
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    
+    if (formData.password !== formData.confirm_password) {
+      toast.error('Passwords do not match')
+      return
+    }
+    
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters')
+      return
+    }
+        
     try {
-      const res = await api.post("/auth/register/", {
-        username,
-        email,
-        password,
-        confirmPassword
-      });
-
-      navigate("/signin", { state: { successMessage: "User created successfully!" } });
+      const response = await api.post('auth/register/', {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        confirm_password: formData.confirm_password,
+        role: formData.role
+      })
       
-    } catch (err) {
-      console.error(err.response?.data);
-      if (err.response) {
-        const errorData = err.response.data;
-        toast.error(errorData.error);
+      if (response.status === 201) {
+        toast.success(response.data.message)
+        // Redirect to login with the same role
+        navigate(`/login?role=${formData.role}`)
+      }
+    } catch (error) {
+      if (error.response?.data) {
+        const errors = error.response.data
+        if (errors.username) toast.error(`Username: ${errors.username[0]}`)
+        if (errors.email) toast.error(`Email: ${errors.email[0]}`)
+        if (errors.password) toast.error(`Password: ${errors.password[0]}`)
+        if (errors.detail) toast.error(errors.detail)
       } else {
-        toast.error("Server error, check backend logs!");
+        toast.error('Registration failed. Please try again.')
       }
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] flex items-center justify-center p-4">
@@ -48,8 +80,10 @@ const SignUp = () => {
           <h1 className="text-3xl font-bold text-white mx-2">
             Create Your <span className="text-[#22d3ee]">Account</span>
           </h1>
-          <p className="text-gray-300">
-            Join Auto Master and begin your driving journey today
+          <p className="text-gray-400 mt-1">
+            {formData.role === 'academy' 
+              ? 'Register your driving academy today' 
+              : 'Join Learn 2 Drive and begin your driving journey today'}
           </p>
         </div>
 
@@ -65,8 +99,9 @@ const SignUp = () => {
                 </div>
                 <input
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={formData.username}
+                  onChange={handleChange}
+                  name="username"
                   className="w-full pl-10 pr-4 py-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22d3ee]"
                   placeholder="Username"
                 />
@@ -84,8 +119,9 @@ const SignUp = () => {
                   type="email"
                   className="w-full pl-10 pr-4 py-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22d3ee]"
                   placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
+                  name="email"
                 />
               </div>
             </div>
@@ -101,8 +137,9 @@ const SignUp = () => {
                   type="password"
                   className="w-full pl-10 pr-4 py-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22d3ee]"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
+                  name="password"
                 />
               </div>
             </div>
@@ -118,8 +155,9 @@ const SignUp = () => {
                   type="password"
                   className="w-full pl-10 pr-4 py-3 bg-[#0f172a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#22d3ee]"
                   placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  name="confirm_password"
                 />
               </div>
             </div>
@@ -139,6 +177,26 @@ const SignUp = () => {
               </div>
             </div>
 
+            {/* Role Indicator (Read-only) */}
+            <div className="space-y-1">
+              <label className="text-gray-300 text-sm font-medium">Account Type</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  {formData.role === 'academy' ? (
+                    <Building className="h-5 w-5 text-[#22d3ee]" />
+                  ) : (
+                    <User className="h-5 w-5 text-[#22d3ee]" />
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={formData.role === 'academy' ? 'Driving Academy' : 'Regular User'}
+                  disabled
+                  className="w-full pl-10 pr-4 py-3 bg-[#0f172a] border border-gray-700 rounded-lg text-gray-400 cursor-not-allowed"
+                />
+              </div>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -152,9 +210,9 @@ const SignUp = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
               Already have an account?{' '}
-              <Link to="/signin" className="text-[#22d3ee] hover:underline font-medium">
+              <a href={`/signin?role=${formData.role}`} className="text-[#22d3ee] hover:underline font-medium">
                 Sign in
-              </Link>
+              </a>
             </p>
           </div>
         </div>

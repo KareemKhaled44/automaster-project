@@ -1,5 +1,5 @@
 import {React, useState, useEffect } from 'react'
-import { Lock, Mail, User } from 'lucide-react'
+import { Lock, Building, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {Header} from '../exports/index.js';
 import api from "../exports/Axios.jsx";
@@ -8,28 +8,57 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const defaultRole = searchParams.get('role') || 'user'
+  
+  // Separate state for each field (simpler and more reliable)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState(defaultRole)
+  const [loading, setLoading] = useState(false)
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            console.log("Sending:", username, password);
-            const res = await api.post("/auth/login/", { username, password });
-            console.log("Response:", res.data);
-            localStorage.setItem("access", res.data.access);
-            localStorage.setItem("refresh", res.data.refresh);
-            // Redirect or perform any other actions after successful login
-            navigate("/", { state: { successMessage: "You have logged in successfully!" } });
-        } catch (err) {
-            console.error("Login error:", err.response);
-          const message = err.response?.data?.detail || "Invalid username or password";
-          toast.error(message);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    
+    if (!username || !password) {
+      toast.error('Please fill in all fields')
+      return
+    }
+    
+    setLoading(true)
+    
+    try {
+      const response = await api.post('auth/login/', {
+        username: username,
+        password: password
+      })
+      
+      if (response.status === 200) {
+        localStorage.setItem('access', response.data.access)
+        localStorage.setItem('refresh', response.data.refresh)
+        localStorage.setItem('role', role)
+        
+        toast.success(`Welcome back!`)
+        
+        // Redirect based on role
+        if (role === 'academy') {
+          navigate('/academy/dashboard')
+        } else {
+          navigate('/')
         }
-    };
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error('Invalid username or password')
+      } else {
+        toast.error('Login failed. Please try again.')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
     useEffect(() => {
         if (location.state && location.state.successMessage) {
@@ -52,8 +81,44 @@ const SignIn = () => {
         <div className="text-center mb-8">
           <h2 className="text-2xl font-semibold text-gray-300">Welcome Back</h2>
           <p className="text-gray-400 mt-1">
-            Sign in to continue your driving journey
+            {role === 'academy' 
+              ? 'Sign in to manage your driving academy' 
+              : 'Sign in to continue your driving journey'}
           </p>
+        </div>
+
+        {/* Role Toggle Buttons */}
+        <div className="flex gap-3 mb-6 bg-[#1e293b] p-1 rounded-lg border border-gray-700">
+          <button
+            onClick={() => {
+              setRole('user')
+              setUsername('')
+              setPassword('')
+            }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${
+              role === 'user'
+                ? 'bg-[#22d3ee] text-[#0f172a] font-medium'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <User className="h-4 w-4" />
+            User Login
+          </button>
+          <button
+            onClick={() => {
+              setRole('academy')
+              setUsername('')
+              setPassword('')
+            }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${
+              role === 'academy'
+                ? 'bg-[#22d3ee] text-[#0f172a] font-medium'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <Building className="h-4 w-4" />
+            Academy Login
+          </button>
         </div>
 
         {/* Sign In Form */}
@@ -72,6 +137,7 @@ const SignIn = () => {
                   placeholder="your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -159,9 +225,9 @@ const SignIn = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-[#22d3ee] hover:underline font-medium">
-                Sign up
-              </Link>
+              <a href={role === 'academy' ? '/register/academy' : '/signup'} className="text-[#22d3ee] hover:underline font-medium">
+                Sign up as {role === 'academy' ? 'academy' : 'user'}
+              </a>
             </p>
           </div>
         </div>
