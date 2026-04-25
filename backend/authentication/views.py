@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 # ================================
@@ -77,3 +78,29 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "role": user.role,
+        }
+
+        # add academy info if user is an academy
+        if user.role == 'academy':
+            try:
+                academy = user.academy_profile
+                data['academy_id'] = academy.id
+                data['academy_name'] = academy.name
+                data['academy_status'] = academy.status
+            except Exception:
+                data['academy_id'] = None
+                data['academy_name'] = None
+                data['academy_status'] = None
+
+        return Response(data, status=status.HTTP_200_OK)
