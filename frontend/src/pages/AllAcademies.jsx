@@ -312,10 +312,10 @@ const AllAcademies = () => {
                   
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-2">
-                    <button className="flex-1 px-4 py-2.5 bg-[#22d3ee] hover:bg-[#1e40af] text-white font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
-                      <BookOpen className="h-4 w-4" />
-                      View Courses
-                    </button>
+                    <a href={`/academy-details/${academy.id}`} className="flex-1 px-4 py-2.5 bg-[#22d3ee] hover:bg-[#1e40af] text-white font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                          <BookOpen className="h-4 w-4" />
+                                          View Courses
+                                        </a>
                     <button className="px-4 py-2.5 bg-transparent border border-[#22d3ee] text-[#22d3ee] hover:bg-[#22d3ee] hover:text-white rounded-lg transition-all duration-300">
                       <MessageCircle className="h-4 w-4" />
                     </button>

@@ -7,13 +7,21 @@ export default function Home() {
         {/* overlay */}
         <div className="absolute inset-0 bg-black/20 z-0"></div>
         <div className="relative z-10 ">
-          <Header />
-          <Hero />
-          <PopularAcademies />
-          <Courses />
-          <Trainers />
-          <FAQs />
-          <Footer />
+          <div id="home">
+            <Hero />
+          </div>
+          <div id="academies">
+            <PopularAcademies />
+          </div>
+          <div id="courses">
+            <Courses />
+          </div>
+          <div id="trainers">
+            <Trainers />
+          </div>
+          <div id="faqs">
+            <FAQs />
+          </div>
         </div>
       </div>
     </>

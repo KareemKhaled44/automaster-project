@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './App.css'
+import { Header, Footer} from './exports';
 import Home from './pages/home'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
@@ -12,19 +13,17 @@ import AllTrainers from './pages/AllTrainers'
 import ContactUs from './pages/ContactUs'
 import TrainerProfile from './pages/TrainerPofile'
 import AcademyDetails from './pages/AcademyDetails';
+import CourseDetails from './pages/CourseDetails.jsx';
 import ForgotPassword from './pages/ForgotPassword';
 import PendingApproval from './pages/PendingApproval';
 import AcademyRegister from './pages/AcademyRegister';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
-
-
   return (
     <Router>
+      <Header />
       <Routes>
-
-        {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
@@ -37,10 +36,11 @@ function App() {
         <Route path="/all-trainers" element={<AllTrainers />} />
         <Route path="/trainer-profile/:id" element={<TrainerProfile />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/courses/:id" element={<CourseDetails/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/academy-details/:id" element={<AcademyDetails />} />
-
       </Routes>
+      <Footer />
 
     <ToastContainer
       position="top-center"
