@@ -43,8 +43,31 @@ class CourseAdmin(admin.ModelAdmin):
 
     form = CourseAdminForm
 
+class TrainerAdminForm(forms.ModelForm):
+    DAYS_CHOICES = [
+        ("saturday", "Saturday"),
+        ("sunday", "Sunday"),
+        ("monday", "Monday"),
+        ("tuesday", "Tuesday"),
+        ("wednesday", "Wednesday"),
+        ("thursday", "Thursday"),
+        ("friday", "Friday"),
+    ]
+
+    working_days = forms.MultipleChoiceField(
+        choices=DAYS_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Trainer
+        fields = '__all__'
+
 class TrainerAdmin(admin.ModelAdmin):
     inlines = [RatingInline, ReviewInline]
+    list_display = ['name', 'academy', 'is_active', 'session_start_time', 'session_end_time']
+    form = TrainerAdminForm
     
 admin.site.register(Rating)
 admin.site.register(Academy, AcademyAdmin)

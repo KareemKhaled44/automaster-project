@@ -82,8 +82,8 @@ POST http://localhost:8000/auth/login/
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "password": "testpass123"
+    "username": "karim",
+    "password": "787898787899"
 }
 
 ### 6 - Login as academy
@@ -184,3 +184,106 @@ Content-Type: application/json
     "username": "oracademy",
     "password": "testpass123"
 }
+
+
+
+
+
+
+
+
+
+
+
+############################################
+bookings
+###########################################
+### 1 - Create a booking (need access token from login)
+POST http://localhost:8000/bookings/create/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU3NzcwLCJpYXQiOjE3NzY0NTc0NzAsImp0aSI6IjMwOGQzNjVhNmFmOTQzNmU4ZGI2NDRhZDhjMmM1N2UzIiwidXNlcl9pZCI6MX0.QwgE-6aHvJtdJ6CaijCflbOKxR2TdnhdirJjyBWJ1OQ
+
+{
+    "course": 1,
+    "trainer": 3,
+    "scheduled_date": "2026-04-25",
+    "start_time": "10:00",
+    "notes": "I prefer morning sessions"
+}
+
+###
+
+### 2 - Get all my bookings
+GET http://localhost:8000/bookings/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU3NzcwLCJpYXQiOjE3NzY0NTc0NzAsImp0aSI6IjMwOGQzNjVhNmFmOTQzNmU4ZGI2NDRhZDhjMmM1N2UzIiwidXNlcl9pZCI6MX0.QwgE-6aHvJtdJ6CaijCflbOKxR2TdnhdirJjyBWJ1OQ
+
+###
+
+### 3 - Get booking detail
+GET http://localhost:8000/bookings/1/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU3NzcwLCJpYXQiOjE3NzY0NTc0NzAsImp0aSI6IjMwOGQzNjVhNmFmOTQzNmU4ZGI2NDRhZDhjMmM1N2UzIiwidXNlcl9pZCI6MX0.QwgE-6aHvJtdJ6CaijCflbOKxR2TdnhdirJjyBWJ1OQ
+
+###
+
+### 4 - Cancel a booking
+PATCH http://localhost:8000/bookings/1/cancel/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU3NzcwLCJpYXQiOjE3NzY0NTc0NzAsImp0aSI6IjMwOGQzNjVhNmFmOTQzNmU4ZGI2NDRhZDhjMmM1N2UzIiwidXNlcl9pZCI6MX0.QwgE-6aHvJtdJ6CaijCflbOKxR2TdnhdirJjyBWJ1OQ
+
+###
+
+### 5 - Try to book same trainer at same date and time (should fail)
+POST http://localhost:8000/bookings/create/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU3NzcwLCJpYXQiOjE3NzY0NTc0NzAsImp0aSI6IjMwOGQzNjVhNmFmOTQzNmU4ZGI2NDRhZDhjMmM1N2UzIiwidXNlcl9pZCI6MX0.QwgE-6aHvJtdJ6CaijCflbOKxR2TdnhdirJjyBWJ1OQ
+
+{
+    "course": 1,
+    "trainer": 3,
+    "scheduled_date": "2026-04-25",
+    "start_time": "10:00",
+    "notes": "duplicate booking test"
+}
+
+###
+
+### 6 - Try to book as academy (should fail)
+POST http://localhost:8000/bookings/create/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NDU4MTM4LCJpYXQiOjE3NzY0NTc4MzgsImp0aSI6ImNkMGY4NmE3NzZkODQzNzJiOTY3NjUxYmU0NDc0MjI1IiwidXNlcl9pZCI6MTF9.DPYMCFaRenzazuSejLTQiVOwKr98fFLQ_sTuqexxNT0
+
+{
+    "course": 1,
+    "trainer": 3,
+    "scheduled_date": "2026-04-25",
+    "start_time": "10:00"
+}
+
+### Additional tests for availability endpoint
+### 1 - Get available slots for a trainer on a working day
+GET http://localhost:8000/bookings/availability/?trainer=6&course=1&date=2026-04-25
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NTUwMDEzLCJpYXQiOjE3NzY1NDk3MTMsImp0aSI6IjlmNzlhNmM1M2VmZDQzN2Q5M2I5ZjI5MDhiNDE5ZDc1IiwidXNlcl9pZCI6MX0.4TNgfwhZjIpt20TcPR0HLaozq25NKMLOzXgZtmpNnlg
+
+###
+
+### 2 - Get available slots on a non working day (should return empty slots)
+GET http://localhost:8000/bookings/availability/?trainer=6&course=1&date=2026-04-24
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NTUwMDEzLCJpYXQiOjE3NzY1NDk3MTMsImp0aSI6IjlmNzlhNmM1M2VmZDQzN2Q5M2I5ZjI5MDhiNDE5ZDc1IiwidXNlcl9pZCI6MX0.4TNgfwhZjIpt20TcPR0HLaozq25NKMLOzXgZtmpNnlg
+
+###
+
+### 3 - Get available slots with past date (should fail)
+GET http://localhost:8000/bookings/availability/?trainer=6&course=1&date=2026-04-01
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NTUwMDEzLCJpYXQiOjE3NzY1NDk3MTMsImp0aSI6IjlmNzlhNmM1M2VmZDQzN2Q5M2I5ZjI5MDhiNDE5ZDc1IiwidXNlcl9pZCI6MX0.4TNgfwhZjIpt20TcPR0HLaozq25NKMLOzXgZtmpNnlg
+
+###
+
+### 4 - Get available slots with missing params (should fail)
+GET http://localhost:8000/bookings/availability/?trainer=6&course=1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2NTUwMDEzLCJpYXQiOjE3NzY1NDk3MTMsImp0aSI6IjlmNzlhNmM1M2VmZDQzN2Q5M2I5ZjI5MDhiNDE5ZDc1IiwidXNlcl9pZCI6MX0.4TNgfwhZjIpt20TcPR0HLaozq25NKMLOzXgZtmpNnlg

@@ -134,20 +134,20 @@ class Location(models.Model):
     
 class Trainer(models.Model):
     name = models.CharField(max_length=100)
-    GENDER_CHOICES = [
-        ("male", "Male"),
-        ("female", "Female"),
-    ]
+    GENDER_CHOICES = [("male", "Male"), ("female", "Female")]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
     bio = models.TextField(blank=True)
-    car_model = models.CharField(max_length=100)
+    car_model = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to='trainers/', null=True, blank=True)
-
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
     academy = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='trainers', null=True, blank=True)
-
     experience_years = models.IntegerField(default=0)
-    availability = models.CharField(max_length=100, blank=True)  # e.g., "Weekdays, Weekends"
+    
+    working_days = models.JSONField(default=list, null=True, blank=True)
+    # stores ["saturday", "sunday", "monday"] etc.
+    session_start_time = models.TimeField(null=True, blank=True)
+    session_end_time = models.TimeField(null=True, blank=True)
+    max_bookings_per_day = models.IntegerField(default=3)
+    is_active = models.BooleanField(default=True)
 
     ratings = GenericRelation(Rating)
 

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #apps
     'academy',
     'authentication',
+    'bookings',
 ]
 
 REST_FRAMEWORK = {
