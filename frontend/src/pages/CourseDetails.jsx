@@ -17,7 +17,7 @@ const CourseDetails = () => {
   const getCourseDetails = () => {
     setLoading(true)
     setError(null)
-    api.get(`courses/${id}/`)
+    api.get(`api/courses/${id}/`)
       .then(response => {
         setCourse(response.data)
         console.log('Course details:', response.data)

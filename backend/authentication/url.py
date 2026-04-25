@@ -5,11 +5,14 @@ from rest_framework_simplejwt.views import (
     TokenBlacklistView
 
 )
-from .views import RegisterView
+from .views import AcademyRegisterView, MeView, UserRegisterView, CustomTokenObtainPairView
 
 urlpatterns = [
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'), 
+    path('register/', UserRegisterView.as_view(), name='user-register'),
+    path('register/academy/', AcademyRegisterView.as_view(), name='academy-register'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('logout/', TokenBlacklistView.as_view(), name='token_logout')
+    path('logout/', TokenBlacklistView.as_view(), name='token_logout'),
+    path('me/', MeView.as_view(), name='me'),
+
 ]

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     #apps
     'academy',
     'authentication',
+    'bookings',
+    'dashboard',
 ]
 
 REST_FRAMEWORK = {
@@ -82,7 +84,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,3 +156,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authentication.User'
+
+# Email settings
+FRONTEND_URL = 'http://localhost:5173'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kemokingo44@gmail.com'
+EMAIL_HOST_PASSWORD = 'aeaj rpkn rvve dgxo'
+DEFAULT_FROM_EMAIL = 'learn2drive <kemokingo44@gmail.com>'

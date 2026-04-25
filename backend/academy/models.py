@@ -82,9 +82,16 @@ class Review(models.Model):
         return f"{self.user} review"
     
 class Academy(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('suspended', 'Suspended'),
+    ]
+
     name = models.CharField(max_length=255)
     user = models.OneToOneField(
-        'authentication.User',   
+        'authentication.User',
         on_delete=models.CASCADE,
         related_name='academy_profile',
         null=True,
@@ -97,6 +104,18 @@ class Academy(models.Model):
     google_maps_url = models.URLField(blank=True, null=True)
     ratings = GenericRelation(Rating)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True)
+
+    # Approval
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    rejected_reason = models.TextField(blank=True, null=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_by = models.ForeignKey(
+        'authentication.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='approved_academies'
+    )
 
     def __str__(self):
         return self.name
@@ -115,20 +134,20 @@ class Location(models.Model):
     
 class Trainer(models.Model):
     name = models.CharField(max_length=100)
-    GENDER_CHOICES = [
-        ("male", "Male"),
-        ("female", "Female"),
-    ]
+    GENDER_CHOICES = [("male", "Male"), ("female", "Female")]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
     bio = models.TextField(blank=True)
-    car_model = models.CharField(max_length=100)
+    car_model = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to='trainers/', null=True, blank=True)
-
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
     academy = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='trainers', null=True, blank=True)
-
     experience_years = models.IntegerField(default=0)
-    availability = models.CharField(max_length=100, blank=True)  # e.g., "Weekdays, Weekends"
+    
+    working_days = models.JSONField(default=list, null=True, blank=True)
+    # stores ["saturday", "sunday", "monday"] etc.
+    session_start_time = models.TimeField(null=True, blank=True)
+    session_end_time = models.TimeField(null=True, blank=True)
+    max_bookings_per_day = models.IntegerField(default=3)
+    is_active = models.BooleanField(default=True)
 
     ratings = GenericRelation(Rating)
 
